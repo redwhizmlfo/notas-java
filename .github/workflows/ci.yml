@@ -1,0 +1,25 @@
+name: Integración Continua
+on:
+ push:
+ branches: [ "develop" ]
+ pull_request:
+ branches: [ "develop" ]
+jobs:
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - name: Clonar repositorio
+ uses: actions/checkout@v4
+ - name: Instalar JDK 17 (Temurin)
+ uses: actions/setup-java@v4
+ with:
+ distribution: temurin
+ java-version: '17'
+ - name: Compilar código fuente
+ run: |
+ mkdir -p out
+ javac -d out src/*.java
+ - name: Compilar y ejecutar pruebas
+ run: |
+ javac -cp out -d out test/*.java
+ java -ea -cp out MainTest
